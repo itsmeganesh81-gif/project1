@@ -1,0 +1,190 @@
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { Search, Filter, SortAsc, Map, List, X } from 'lucide-react';
+import { mockDonors, BLOOD_GROUPS, BANGALORE_LOCALITIES } from '../data/mockDonors';
+import { filterDonors, sortDonors } from '../utils/filters';
+import { RADIUS_OPTIONS } from '../utils/distanceCalculator';
+import DonorCard from '../components/donors/DonorCard';
+
+const LOCALITY_COORDS = {
+  'Koramangala': { lat: 12.9352, lng: 77.6245 },
+  'Indiranagar': { lat: 12.9784, lng: 77.6408 },
+  'Whitefield': { lat: 12.9698, lng: 77.7500 },
+  'Electronic City': { lat: 12.8458, lng: 77.6723 },
+  'Jayanagar': { lat: 12.9250, lng: 77.5938 },
+  'Rajajinagar': { lat: 12.9876, lng: 77.5540 },
+  'Hebbal': { lat: 13.0358, lng: 77.5970 },
+  'Yelahanka': { lat: 13.1007, lng: 77.5963 },
+  'Malleshwaram': { lat: 13.0035, lng: 77.5697 },
+  'Marathahalli': { lat: 12.9591, lng: 77.6974 },
+};
+
+export default function FindDonors() {
+  const [searchParams] = useSearchParams();
+  const [filters, setFilters] = useState({
+    bloodGroup: searchParams.get('blood') || 'all',
+    locality: 'Koramangala',
+    radius: 50,
+    availableOnly: false,
+    sortBy: 'distance',
+  });
+  const [search, setSearch] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
+
+  const loc = LOCALITY_COORDS[filters.locality] || LOCALITY_COORDS['Koramangala'];
+  let donors = filterDonors(mockDonors, {
+    bloodGroup: filters.bloodGroup === 'all' ? null : filters.bloodGroup,
+    radius: filters.radius,
+    availableOnly: filters.availableOnly,
+  }, loc);
+
+  if (search.trim()) {
+    const q = search.toLowerCase();
+    donors = donors.filter(d =>
+      d.name.toLowerCase().includes(q) ||
+      d.locality.toLowerCase().includes(q) ||
+      d.bloodGroup.toLowerCase().includes(q)
+    );
+  }
+
+  donors = sortDonors(donors, filters.sortBy);
+
+  return (
+    <div style={{ maxWidth: 1280, margin: '0 auto', padding: '32px 20px' }}>
+      {/* Header */}
+      <div style={{ marginBottom: 28 }}>
+        <h1 style={{ fontSize: 'clamp(22px, 3vw, 32px)', color: '#172033', marginBottom: 6 }}>Find Blood Donors</h1>
+        <p style={{ color: '#64748B', fontSize: 15 }}>Discover available donors across Bengaluru</p>
+      </div>
+
+      {/* Search & Filters */}
+      <div className="card" style={{ padding: 20, marginBottom: 24 }}>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          {/* Search bar */}
+          <div style={{ position: 'relative', flex: 1, minWidth: 200 }}>
+            <Search size={16} color="#94a3b8" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)' }} />
+            <input
+              id="donor-search-input"
+              className="form-input"
+              placeholder="Search by name, locality, blood group..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              style={{ paddingLeft: 38, paddingRight: search ? 36 : 14 }}
+            />
+            {search && (
+              <button onClick={() => setSearch('')} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8' }}>
+                <X size={16} />
+              </button>
+            )}
+          </div>
+
+          {/* Blood Group Quick filter */}
+          <select
+            className="form-input form-select"
+            style={{ width: 'auto', minWidth: 150 }}
+            value={filters.bloodGroup}
+            onChange={e => setFilters(f => ({ ...f, bloodGroup: e.target.value }))}
+          >
+            <option value="all">All Blood Groups</option>
+            {BLOOD_GROUPS.map(bg => <option key={bg} value={bg}>{bg}</option>)}
+          </select>
+
+          {/* Sort */}
+          <select
+            className="form-input form-select"
+            style={{ width: 'auto', minWidth: 150 }}
+            value={filters.sortBy}
+            onChange={e => setFilters(f => ({ ...f, sortBy: e.target.value }))}
+          >
+            <option value="distance">Sort: Nearest</option>
+            <option value="donations">Sort: Most Donations</option>
+            <option value="points">Sort: Highest Points</option>
+            <option value="name">Sort: Name A-Z</option>
+          </select>
+
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className={`btn ${showFilters ? 'btn-secondary' : 'btn-ghost'}`}
+            style={{ whiteSpace: 'nowrap' }}
+          >
+            <Filter size={16} /> Filters
+          </button>
+        </div>
+
+        {/* Expanded filters */}
+        {showFilters && (
+          <div className="animate-fadeIn" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 16, marginTop: 16, paddingTop: 16, borderTop: '1px solid #f1f5f9' }}>
+            <div className="form-group">
+              <label className="form-label">Location</label>
+              <select className="form-input form-select" value={filters.locality} onChange={e => setFilters(f => ({ ...f, locality: e.target.value }))}>
+                {Object.keys(LOCALITY_COORDS).map(l => <option key={l} value={l}>{l}</option>)}
+              </select>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Max Radius</label>
+              <select className="form-input form-select" value={filters.radius} onChange={e => setFilters(f => ({ ...f, radius: Number(e.target.value) }))}>
+                {RADIUS_OPTIONS.map(r => <option key={r.value} value={r.value}>{r.label}</option>)}
+              </select>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Availability</label>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', padding: '11px 14px', border: '1.5px solid #e2e8f0', borderRadius: 10 }}>
+                <input type="checkbox" checked={filters.availableOnly} onChange={e => setFilters(f => ({ ...f, availableOnly: e.target.checked }))} style={{ width: 16, height: 16, accentColor: '#D62839' }} />
+                <span style={{ fontSize: 14, color: '#172033', fontWeight: 500 }}>Available Only</span>
+              </label>
+            </div>
+            <div className="form-group" style={{ justifyContent: 'flex-end' }}>
+              <label className="form-label">&nbsp;</label>
+              <button onClick={() => setFilters({ bloodGroup: 'all', locality: 'Koramangala', radius: 50, availableOnly: false, sortBy: 'distance' })} className="btn btn-ghost" style={{ height: 42 }}>
+                Reset Filters
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Blood Group pills */}
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 24 }}>
+        {['all', ...BLOOD_GROUPS].map(bg => (
+          <button
+            key={bg}
+            onClick={() => setFilters(f => ({ ...f, bloodGroup: bg }))}
+            style={{
+              padding: '5px 14px', borderRadius: 20, border: `1.5px solid ${filters.bloodGroup === bg ? '#D62839' : '#e2e8f0'}`,
+              background: filters.bloodGroup === bg ? '#D62839' : 'white',
+              color: filters.bloodGroup === bg ? 'white' : '#64748B',
+              fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s',
+            }}
+          >
+            {bg === 'all' ? 'All' : bg}
+          </button>
+        ))}
+      </div>
+
+      {/* Results header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+        <p style={{ fontSize: 14, color: '#64748B', fontWeight: 500 }}>
+          <strong style={{ color: '#172033' }}>{donors.length}</strong> donors found
+          {filters.bloodGroup !== 'all' && ` • ${filters.bloodGroup}`}
+          {filters.availableOnly && ' • Available only'}
+        </p>
+      </div>
+
+      {/* Grid */}
+      {donors.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '60px 20px', background: 'white', borderRadius: 16, border: '1px solid #e2e8f0' }}>
+          <div style={{ fontSize: 56, marginBottom: 16 }}>🔍</div>
+          <h3 style={{ fontSize: 18, fontWeight: 700, color: '#172033', marginBottom: 8 }}>No donors match your search</h3>
+          <p style={{ color: '#64748B', fontSize: 14, marginBottom: 20 }}>Try adjusting your filters or expanding the search radius.</p>
+          <button onClick={() => { setFilters({ bloodGroup: 'all', locality: 'Koramangala', radius: 50, availableOnly: false, sortBy: 'distance' }); setSearch(''); }} className="btn btn-primary">
+            Clear All Filters
+          </button>
+        </div>
+      ) : (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 20 }}>
+          {donors.map(donor => <DonorCard key={donor.id} donor={donor} />)}
+        </div>
+      )}
+    </div>
+  );
+}
