@@ -1,19 +1,28 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import {
-  Droplets, Menu, X, Bell, User, LogOut, Settings,
-  Heart, Search, LayoutDashboard, Trophy, Gift, ClipboardList,
-  Map, ChevronDown, History
+  Menu, X, User, LogOut, Settings,
+  Search, LayoutDashboard,
+  ChevronDown, Mic
 } from 'lucide-react';
+import {
+  BloodBridgeLogoIcon, BloodBankVaultIcon, HospitalClinicalIcon,
+  VolunteerCourierIcon, ForecasterAlgorithmIcon, SurplusExchangeIcon,
+  RecurringTransfusionIcon, RarePhenotypeIcon, GrievanceSupportIcon
+} from '../common/CustomIcons';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
+import VoiceAssistantModal from '../voice/VoiceAssistantModal';
 import Avatar from '../common/Avatar';
 
 export default function Navbar() {
   const { user, logout, switchRole } = useAuth();
+  const { lang, changeLanguage, t } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [voiceOpen, setVoiceOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -22,12 +31,26 @@ export default function Navbar() {
 
   const navLinks = user ? [
     { to: user.activeRole === 'donor' ? '/donor-dashboard' : '/receiver-dashboard', label: 'Dashboard', icon: <LayoutDashboard size={16} /> },
-    { to: '/find-donors', label: 'Find Donors', icon: <Search size={16} /> },
-    { to: '/map', label: 'Map', icon: <Map size={16} /> },
-    { to: '/requests', label: 'Requests', icon: <ClipboardList size={16} /> },
-    { to: '/leaderboard', label: 'Leaderboard', icon: <Trophy size={16} /> },
-    { to: '/rewards', label: 'Rewards', icon: <Gift size={16} /> },
-  ] : [];
+    { to: '/find-donors', label: t('findDonors'), icon: <Search size={16} /> },
+    { to: '/blood-bank', label: t('bloodBank'), icon: <BloodBankVaultIcon size={16} /> },
+    { to: '/hospital', label: t('hospital'), icon: <HospitalClinicalIcon size={16} /> },
+    { to: '/volunteers', label: t('volunteers'), icon: <VolunteerCourierIcon size={16} /> },
+    { to: '/shortage-ai', label: t('shortageAI'), icon: <ForecasterAlgorithmIcon size={16} /> },
+    { to: '/surplus-board', label: t('surplusBoard'), icon: <SurplusExchangeIcon size={16} /> },
+    { to: '/recurring-transfusions', label: t('recurringCare'), icon: <RecurringTransfusionIcon size={16} /> },
+    { to: '/rare-network', label: t('rareBlood'), icon: <RarePhenotypeIcon size={16} /> },
+    { to: '/reviews', label: t('reviewsAndSupport'), icon: <GrievanceSupportIcon size={16} /> },
+  ] : [
+    { to: '/find-donors', label: t('findDonors'), icon: <Search size={16} /> },
+    { to: '/blood-bank', label: t('bloodBank'), icon: <BloodBankVaultIcon size={16} /> },
+    { to: '/hospital', label: t('hospital'), icon: <HospitalClinicalIcon size={16} /> },
+    { to: '/volunteers', label: t('volunteers'), icon: <VolunteerCourierIcon size={16} /> },
+    { to: '/shortage-ai', label: t('shortageAI'), icon: <ForecasterAlgorithmIcon size={16} /> },
+    { to: '/surplus-board', label: t('surplusBoard'), icon: <SurplusExchangeIcon size={16} /> },
+    { to: '/recurring-transfusions', label: t('recurringCare'), icon: <RecurringTransfusionIcon size={16} /> },
+    { to: '/rare-network', label: t('rareBlood'), icon: <RarePhenotypeIcon size={16} /> },
+    { to: '/reviews', label: t('reviewsAndSupport'), icon: <GrievanceSupportIcon size={16} /> },
+  ];
 
   return (
     <header style={{
@@ -40,12 +63,10 @@ export default function Navbar() {
         {/* Logo */}
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', marginRight: 32 }}>
           <div style={{
-            width: 36, height: 36, borderRadius: 10,
-            background: 'linear-gradient(135deg, #D62839, #8D1B2A)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 2px 8px rgba(214,40,57,0.3)',
+            filter: 'drop-shadow(0 2px 6px rgba(214,40,57,0.3))'
           }}>
-            <Droplets size={20} color="white" fill="white" />
+            <BloodBridgeLogoIcon size={32} />
           </div>
           <div>
             <span style={{ fontFamily: 'Plus Jakarta Sans', fontWeight: 800, fontSize: 18, color: '#172033' }}>Blood</span>
@@ -69,7 +90,58 @@ export default function Navbar() {
         </nav>
 
         {/* Right side */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginLeft: 'auto' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 'auto' }}>
+          {/* Language Switcher Pill */}
+          <div style={{ display: 'flex', background: '#f1f5f9', borderRadius: 8, padding: 2, gap: 2 }}>
+            <button
+              onClick={() => changeLanguage('en')}
+              style={{
+                border: 'none', background: lang === 'en' ? 'white' : 'transparent',
+                padding: '4px 8px', borderRadius: 6, fontSize: 11, fontWeight: 700,
+                color: lang === 'en' ? '#D62839' : '#64748b', cursor: 'pointer',
+                boxShadow: lang === 'en' ? '0 1px 2px rgba(0,0,0,0.08)' : 'none'
+              }}
+            >
+              EN
+            </button>
+            <button
+              onClick={() => changeLanguage('kn')}
+              style={{
+                border: 'none', background: lang === 'kn' ? 'white' : 'transparent',
+                padding: '4px 8px', borderRadius: 6, fontSize: 11, fontWeight: 700,
+                color: lang === 'kn' ? '#D62839' : '#64748b', cursor: 'pointer',
+                boxShadow: lang === 'kn' ? '0 1px 2px rgba(0,0,0,0.08)' : 'none'
+              }}
+            >
+              ಕನ್ನಡ
+            </button>
+            <button
+              onClick={() => changeLanguage('hi')}
+              style={{
+                border: 'none', background: lang === 'hi' ? 'white' : 'transparent',
+                padding: '4px 8px', borderRadius: 6, fontSize: 11, fontWeight: 700,
+                color: lang === 'hi' ? '#D62839' : '#64748b', cursor: 'pointer',
+                boxShadow: lang === 'hi' ? '0 1px 2px rgba(0,0,0,0.08)' : 'none'
+              }}
+            >
+              हिन्दी
+            </button>
+          </div>
+
+          {/* Voice Assistant Mic Trigger */}
+          <button
+            onClick={() => setVoiceOpen(true)}
+            title="BloodBridge Voice Assistant"
+            style={{
+              width: 34, height: 34, borderRadius: 8,
+              background: '#fee2e2', color: '#b91c1c', border: 'none',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 1px 3px rgba(214,40,57,0.2)', transition: 'all 0.2s'
+            }}
+          >
+            <Mic size={17} />
+          </button>
+
           {user ? (
             <>
               {/* Role switcher */}
@@ -204,6 +276,9 @@ export default function Navbar() {
           )}
         </div>
       )}
+
+      {/* Voice Assistant Modal */}
+      <VoiceAssistantModal isOpen={voiceOpen} onClose={() => setVoiceOpen(false)} />
     </header>
   );
 }

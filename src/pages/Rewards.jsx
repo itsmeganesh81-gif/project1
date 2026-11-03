@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Gift, Award, CheckCircle, Sparkles, Copy, ExternalLink, Filter, AlertCircle, ShoppingBag, ArrowRight } from 'lucide-react';
+import { Gift, Award, CheckCircle, Copy, ExternalLink, Filter, AlertCircle, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useApp } from '../context/AppContext';
 import { mockRewards } from '../data/mockRewards';
@@ -104,7 +104,7 @@ export default function Rewards() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 24, position: 'relative', zIndex: 1 }}>
           <div style={{ maxWidth: 620 }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '4px 12px', background: 'rgba(214,40,57,0.2)', border: '1px solid rgba(214,40,57,0.4)', borderRadius: 20, fontSize: 12, fontWeight: 700, color: '#fca5a5', marginBottom: 12 }}>
-              <Sparkles size={14} /> Lifesaver Rewards & Perks
+              <Award size={14} /> Lifesaver Rewards & Perks
             </div>
             <h1 style={{ fontSize: 'clamp(24px, 4vw, 34px)', fontWeight: 800, marginBottom: 8, lineHeight: 1.2 }}>
               Redeem Rewards for Your Impact
