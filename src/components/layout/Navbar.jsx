@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import {
   BloodBridgeLogoIcon, BloodBankVaultIcon, HospitalClinicalIcon,
-  VolunteerCourierIcon, ForecasterAlgorithmIcon, SurplusExchangeIcon,
+  VolunteerCourierIcon, SurplusExchangeIcon,
   RecurringTransfusionIcon, RarePhenotypeIcon, GrievanceSupportIcon
 } from '../common/CustomIcons';
 import { useAuth } from '../../context/AuthContext';
@@ -35,7 +35,6 @@ export default function Navbar() {
     { to: '/blood-bank', label: t('bloodBank'), icon: <BloodBankVaultIcon size={16} /> },
     { to: '/hospital', label: t('hospital'), icon: <HospitalClinicalIcon size={16} /> },
     { to: '/volunteers', label: t('volunteers'), icon: <VolunteerCourierIcon size={16} /> },
-    { to: '/shortage-ai', label: t('shortageAI'), icon: <ForecasterAlgorithmIcon size={16} /> },
     { to: '/surplus-board', label: t('surplusBoard'), icon: <SurplusExchangeIcon size={16} /> },
     { to: '/recurring-transfusions', label: t('recurringCare'), icon: <RecurringTransfusionIcon size={16} /> },
     { to: '/rare-network', label: t('rareBlood'), icon: <RarePhenotypeIcon size={16} /> },
@@ -45,7 +44,6 @@ export default function Navbar() {
     { to: '/blood-bank', label: t('bloodBank'), icon: <BloodBankVaultIcon size={16} /> },
     { to: '/hospital', label: t('hospital'), icon: <HospitalClinicalIcon size={16} /> },
     { to: '/volunteers', label: t('volunteers'), icon: <VolunteerCourierIcon size={16} /> },
-    { to: '/shortage-ai', label: t('shortageAI'), icon: <ForecasterAlgorithmIcon size={16} /> },
     { to: '/surplus-board', label: t('surplusBoard'), icon: <SurplusExchangeIcon size={16} /> },
     { to: '/recurring-transfusions', label: t('recurringCare'), icon: <RecurringTransfusionIcon size={16} /> },
     { to: '/rare-network', label: t('rareBlood'), icon: <RarePhenotypeIcon size={16} /> },

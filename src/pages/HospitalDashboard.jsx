@@ -156,48 +156,48 @@ export default function HospitalDashboard() {
           </div>
         )}
 
-        {/* Header */}
-        <div style={{
-          background: 'white', borderRadius: 16, padding: '28px 32px',
-          border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+        {/* Template Crimson Curved Hero Header */}
+        <div className="template-crimson-header" style={{
+          borderRadius: 32, padding: '36px 32px',
+          boxShadow: '0 12px 30px rgba(200, 30, 50, 0.22)',
           display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 20,
-          marginBottom: 24
+          marginBottom: 28, color: 'white'
         }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, flexWrap: 'wrap' }}>
               <div style={{
-                background: '#fee2e2', color: '#b91c1c', padding: '8px 12px', borderRadius: 8,
-                display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 700
+                background: 'rgba(255, 255, 255, 0.2)', padding: '6px 14px', borderRadius: 9999,
+                display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 800, color: '#FFFFFF'
               }}>
-                <HospitalClinicalIcon size={16} color="#b91c1c" />
-                <span>Accredited Hospital Partner</span>
+                <HospitalClinicalIcon size={16} color="#FFFFFF" />
+                <span>Accredited Clinical Hospital</span>
               </div>
-              <span style={{ fontSize: 13, color: '#64748b' }}>License: KA-BLR-HOSP-2021-049</span>
-              <span style={{ fontSize: 12, background: '#dcfce7', color: '#15803d', padding: '2px 8px', borderRadius: 4, fontWeight: 600 }}>
-                NABH Verified
+              <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.85)' }}>Lic: KA-BLR-HOSP-2021-049</span>
+              <span style={{ fontSize: 11, background: '#DCFCE7', color: '#166534', padding: '3px 10px', borderRadius: 9999, fontWeight: 800 }}>
+                ✓ NABH Verified
               </span>
             </div>
-            <h1 style={{ fontSize: 26, fontWeight: 800, color: '#0f172a', margin: 0 }}>
+            <h1 style={{ fontSize: 28, fontWeight: 900, color: '#FFFFFF', margin: 0, fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
               Manipal Hospital Whitefield
             </h1>
-            <p style={{ color: '#64748b', fontSize: 14, margin: '4px 0 0' }}>
-              Department of Transfusion Medicine & Emergency Care • Whitefield, Bengaluru
+            <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 13, margin: '6px 0 0' }}>
+              Department of Transfusion Medicine & Acute Trauma Care • Whitefield, Bengaluru
             </p>
           </div>
 
-          <div style={{ display: 'flex', gap: 12 }}>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
             <button
               onClick={() => {
                 setReqForm({ ...reqForm, urgency: 'emergency_mhp' });
                 setShowReqModal(true);
               }}
               style={{
-                background: '#ef4444', color: 'white', border: 'none', borderRadius: 8,
-                padding: '10px 16px', fontWeight: 800, fontSize: 13, cursor: 'pointer',
-                display: 'flex', alignItems: 'center', gap: 6, boxShadow: '0 2px 6px rgba(239,68,68,0.3)'
+                background: '#FFFFFF', color: '#DC2626', border: 'none', borderRadius: 9999,
+                padding: '11px 20px', fontWeight: 900, fontSize: 13, cursor: 'pointer',
+                display: 'inline-flex', alignItems: 'center', gap: 8, boxShadow: '0 4px 14px rgba(0,0,0,0.15)'
               }}
             >
-              <AlertOctagon size={16} />
+              <AlertOctagon size={16} color="#DC2626" />
               Massive Hemorrhage SOS
             </button>
             <button
@@ -206,26 +206,28 @@ export default function HospitalDashboard() {
                 setShowReqModal(true);
               }}
               style={{
-                background: '#0f172a', color: 'white', border: 'none', borderRadius: 8,
-                padding: '10px 18px', fontWeight: 600, fontSize: 14, cursor: 'pointer',
-                display: 'flex', alignItems: 'center', gap: 8
+                background: 'rgba(255,255,255,0.18)', color: '#FFFFFF', border: '1.5px solid rgba(255,255,255,0.4)',
+                borderRadius: 9999, padding: '11px 22px', fontWeight: 800, fontSize: 13, cursor: 'pointer',
+                display: 'inline-flex', alignItems: 'center', gap: 8
               }}
             >
-              <Plus size={16} />
+              <Plus size={16} color="#FFFFFF" />
               New Requisition
             </button>
           </div>
         </div>
 
-        {/* Navigation Tabs */}
-        <div style={{ display: 'flex', gap: 10, borderBottom: '1px solid #e2e8f0', marginBottom: 24 }}>
+        {/* Navigation Tabs (Template Pill Navigation) */}
+        <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
           <button
             onClick={() => setActiveTab('requisitions')}
             style={{
-              padding: '12px 20px', background: 'none', border: 'none',
-              borderBottom: activeTab === 'requisitions' ? '3px solid #D62839' : '3px solid transparent',
-              fontWeight: 700, fontSize: 14, color: activeTab === 'requisitions' ? '#D62839' : '#64748b',
-              cursor: 'pointer'
+              padding: '9px 20px', borderRadius: 9999, border: 'none',
+              fontWeight: 800, fontSize: 13,
+              background: activeTab === 'requisitions' ? '#C81E32' : '#FFFFFF',
+              color: activeTab === 'requisitions' ? '#FFFFFF' : '#64748B',
+              boxShadow: activeTab === 'requisitions' ? '0 4px 14px rgba(200, 30, 50, 0.28)' : '0 1px 3px rgba(0,0,0,0.05)',
+              cursor: 'pointer', transition: 'all 0.2s',
             }}
           >
             Clinical Requisitions ({requisitions.length})
@@ -233,10 +235,12 @@ export default function HospitalDashboard() {
           <button
             onClick={() => setActiveTab('network_stock')}
             style={{
-              padding: '12px 20px', background: 'none', border: 'none',
-              borderBottom: activeTab === 'network_stock' ? '3px solid #D62839' : '3px solid transparent',
-              fontWeight: 700, fontSize: 14, color: activeTab === 'network_stock' ? '#D62839' : '#64748b',
-              cursor: 'pointer'
+              padding: '9px 20px', borderRadius: 9999, border: 'none',
+              fontWeight: 800, fontSize: 13,
+              background: activeTab === 'network_stock' ? '#C81E32' : '#FFFFFF',
+              color: activeTab === 'network_stock' ? '#FFFFFF' : '#64748B',
+              boxShadow: activeTab === 'network_stock' ? '0 4px 14px rgba(200, 30, 50, 0.28)' : '0 1px 3px rgba(0,0,0,0.05)',
+              cursor: 'pointer', transition: 'all 0.2s',
             }}
           >
             Regional Blood Bank Stock ({networkBloodBanks.length} Hubs)

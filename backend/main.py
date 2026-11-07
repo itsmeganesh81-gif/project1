@@ -17,7 +17,6 @@ from backend.routes.rare_routes import router as rare_router
 from backend.routes.inventory_routes import router as inventory_router
 from backend.routes.hospital_routes import router as hospital_router
 from backend.routes.volunteer_routes import router as volunteer_router
-from backend.routes.forecast_routes import router as forecast_router
 from backend.routes.expiry_routes import router as expiry_router
 from backend.routes.review_routes import router as review_router
 from backend.seed import seed_database
@@ -54,7 +53,6 @@ app.include_router(rare_router, prefix="/api")
 app.include_router(inventory_router)
 app.include_router(hospital_router)
 app.include_router(volunteer_router)
-app.include_router(forecast_router)
 app.include_router(expiry_router)
 app.include_router(review_router)
 

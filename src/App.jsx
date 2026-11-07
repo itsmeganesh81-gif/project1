@@ -26,7 +26,6 @@ import RareBloodNetwork from './pages/RareBloodNetwork';
 import BloodBankDashboard from './pages/BloodBankDashboard';
 import HospitalDashboard from './pages/HospitalDashboard';
 import VolunteerDashboard from './pages/VolunteerDashboard';
-import ShortageAnalytics from './pages/ShortageAnalytics';
 import SurplusBoard from './pages/SurplusBoard';
 import ReviewsAndSupport from './pages/ReviewsAndSupport';
 
@@ -55,7 +54,6 @@ export default function App() {
                   <Route path="/blood-bank" element={<BloodBankDashboard />} />
                   <Route path="/hospital" element={<HospitalDashboard />} />
                   <Route path="/volunteers" element={<VolunteerDashboard />} />
-                  <Route path="/shortage-ai" element={<ShortageAnalytics />} />
                   <Route path="/surplus-board" element={<SurplusBoard />} />
                   <Route path="/reviews" element={<ReviewsAndSupport />} />
                   <Route path="/support" element={<ReviewsAndSupport />} />

@@ -37,10 +37,9 @@ export default function Footer() {
             {[
               { to: '/find-donors', label: 'AI Smart Donor Match' },
               { to: '/recurring-transfusions', label: 'Thalassemia Patient Circles' },
-              { to: '/rare-blood', label: 'Rare Blood Group SOS' },
+              { to: '/rare-network', label: 'Rare Blood Group SOS' },
               { to: '/surplus-board', label: 'Near-Expiry Surplus Board' },
-              { to: '/shortage-analytics', label: 'Shortage Predictive AI' },
-              { to: '/volunteer', label: 'Volunteer Courier Hub' },
+              { to: '/volunteers', label: 'Volunteer Courier Hub' },
             ].map(link => (
               <Link key={link.to} to={link.to} style={{ display: 'block', color: '#94a3b8', fontSize: 13, textDecoration: 'none', marginBottom: 8, transition: 'color 0.2s' }}
                 onMouseEnter={e => e.target.style.color = '#D62839'}

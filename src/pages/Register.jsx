@@ -1,8 +1,9 @@
 import { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Droplets, CheckCircle, Camera, Upload, X, User } from 'lucide-react';
+import { Eye, EyeOff, CheckCircle, Camera, Upload, X, User } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { BLOOD_GROUPS, BANGALORE_LOCALITIES, SAMPLE_AVATARS } from '../data/mockDonors';
+import { BloodBridgeLogoIcon } from '../components/common/CustomIcons';
 
 const steps = ['Account & Photo', 'Personal Info', 'Location'];
 
@@ -95,15 +96,16 @@ export default function Register() {
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 28 }}>
           <div style={{
-            width: 56, height: 56, borderRadius: 16,
-            background: 'linear-gradient(135deg, #D62839, #8D1B2A)',
+            width: 56, height: 56, borderRadius: '50%',
+            background: 'linear-gradient(135deg, #C81E32, #88111F)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            margin: '0 auto 16px', boxShadow: '0 8px 24px rgba(214,40,57,0.3)',
+            margin: '0 auto 16px', boxShadow: '0 8px 24px rgba(200,30,50,0.3)',
+            border: '3px solid #FFFFFF'
           }}>
-            <Droplets size={28} color="white" fill="white" />
+            <BloodBridgeLogoIcon size={30} color="white" />
           </div>
-          <h1 style={{ fontSize: 28, fontWeight: 900, color: '#172033' }}>Join BloodBridge</h1>
-          <p style={{ color: '#64748B', fontSize: 15, marginTop: 6 }}>Create your donor or receiver profile</p>
+          <h1 style={{ fontSize: 28, fontWeight: 900, color: '#172033', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Join BloodBridge</h1>
+          <p style={{ color: '#64748B', fontSize: 14, marginTop: 4 }}>Create your verified donor or recipient profile</p>
         </div>
 
         {/* Progress */}
@@ -357,15 +359,15 @@ export default function Register() {
 
           <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
             {step > 0 && (
-              <button onClick={() => { setStep(s => s - 1); setError(''); }} className="btn btn-ghost" style={{ flex: 1, justifyContent: 'center' }}>
+              <button onClick={() => { setStep(s => s - 1); setError(''); }} className="template-pill-btn-outline" style={{ flex: 1 }}>
                 Back
               </button>
             )}
             <button
               id="register-next"
               onClick={handleNext}
-              className="btn btn-primary"
-              style={{ flex: 2, justifyContent: 'center' }}
+              className="template-pill-btn"
+              style={{ flex: 2, padding: '12px 24px' }}
               disabled={loading}
             >
               {loading ? 'Creating account...' : step === 2 ? '🩸 Create Account' : 'Continue →'}
@@ -375,7 +377,7 @@ export default function Register() {
 
         <p style={{ textAlign: 'center', fontSize: 13, color: '#64748B', marginTop: 16 }}>
           Already have an account?{' '}
-          <Link to="/login" style={{ color: '#D62839', fontWeight: 700, textDecoration: 'none' }}>Sign in →</Link>
+          <Link to="/login" style={{ color: '#C81E32', fontWeight: 800, textDecoration: 'none' }}>Sign in →</Link>
         </p>
       </div>
     </div>
