@@ -1,6 +1,11 @@
 import { Link } from 'react-router-dom';
-import { Heart, MapPin, Shield, Award, Users, TrendingUp, ArrowRight, CheckCircle, Droplets, Star } from 'lucide-react';
+import { Heart, MapPin, Shield, Award, Users, TrendingUp, ArrowRight, CheckCircle, Star, ShieldCheck } from 'lucide-react';
 import { mockDonors } from '../data/mockDonors';
+import {
+  BloodBridgeLogoIcon, BloodBankVaultIcon, HospitalClinicalIcon,
+  SurplusExchangeIcon, RecurringTransfusionIcon, RarePhenotypeIcon,
+  VolunteerCourierIcon, GrievanceSupportIcon, ClinicalMatchIcon
+} from '../components/common/CustomIcons';
 
 const stats = [
   { label: 'Registered Donors', value: '10,000+', icon: '👥' },
@@ -9,37 +14,79 @@ const stats = [
   { label: 'Donations Facilitated', value: '8,500+', icon: '🩸' },
 ];
 
-const features = [
+const featureCategories = [
   {
-    icon: <MapPin size={24} color="#D62839" />,
-    title: 'Geo-Location Search',
-    description: 'Find blood donors within your specified radius using an interactive map powered by real coordinates.',
+    category: '1. Clinical & Institutional Network',
+    badge: 'Hospital & Vault Infrastructure',
+    items: [
+      {
+        icon: <BloodBankVaultIcon size={24} color="#C81E32" />,
+        title: 'Blood Bank Cryo-Vault',
+        to: '/blood-bank',
+        description: 'Component-level inventory tracking for PRBC, Platelets, FFP with mandatory 5-TTI safety clearance.',
+      },
+      {
+        icon: <HospitalClinicalIcon size={24} color="#C81E32" />,
+        title: 'Hospital Emergency Requisitions',
+        to: '/hospital',
+        description: 'Electronic requisitions, Massive Hemorrhage Protocol (MHP), and inter-facility cold chain transfers.',
+      },
+      {
+        icon: <SurplusExchangeIcon size={24} color="#C81E32" />,
+        title: 'Zero-Wastage Surplus Board',
+        to: '/surplus-board',
+        description: 'Near-expiry alerts board connecting hospitals to rescue units expiring within 48h to prevent wastage.',
+      },
+    ]
   },
   {
-    icon: <Shield size={24} color="#D62839" />,
-    title: 'Verified Donors',
-    description: 'Donors are verified through our community system, ensuring you connect with genuine volunteers.',
+    category: '2. Specialized Lifeline Patient Care',
+    badge: 'Chronic Care & Emergency SOS',
+    items: [
+      {
+        icon: <RecurringTransfusionIcon size={24} color="#C81E32" />,
+        title: 'Thalassemia Patient Circles',
+        to: '/recurring-transfusions',
+        description: '14, 21, and 28-day recurring transfusion cycles, nadir Hb increment logs, and committed donor pledges.',
+      },
+      {
+        icon: <RarePhenotypeIcon size={24} color="#C81E32" />,
+        title: 'Rare Blood Group Network',
+        to: '/rare-network',
+        description: 'Bombay Phenotype (hh), Rh-Null and Duffy antigen registry verified by Immunohematology reference labs.',
+      },
+      {
+        icon: <VolunteerCourierIcon size={24} color="#C81E32" />,
+        title: 'Volunteer Courier Rapid Rescue',
+        to: '/volunteers',
+        description: 'Temperature-controlled bio-transit dispatch connecting volunteer couriers for rapid sample transport.',
+      },
+    ]
   },
   {
-    icon: <Award size={24} color="#D62839" />,
-    title: 'Gamification & Rewards',
-    description: 'Donors earn points, badges, and levels for every donation. Redeem rewards from our marketplace.',
-  },
-  {
-    icon: <TrendingUp size={24} color="#D62839" />,
-    title: 'Leaderboards',
-    description: 'City-wide and global leaderboards to celebrate our top donors and inspire others.',
-  },
-  {
-    icon: <Users size={24} color="#D62839" />,
-    title: 'Community Driven',
-    description: 'A growing community of voluntary donors committed to saving lives across Bengaluru and beyond.',
-  },
-  {
-    icon: <Heart size={24} color="#D62839" />,
-    title: 'Emergency Requests',
-    description: 'Send urgent blood requests directly to available donors with urgency-based priority levels.',
-  },
+    category: '3. Community Trust, Safety & Grievances',
+    badge: 'DPDP Act 2023 & Resolution',
+    items: [
+      {
+        icon: <GrievanceSupportIcon size={24} color="#C81E32" />,
+        title: 'Problem Resolution & Reviews',
+        to: '/reviews',
+        description: 'Dedicated patient problem reporting, transparent resolution tracking, and official grievance replies.',
+      },
+      {
+        icon: <ClinicalMatchIcon size={24} color="#C81E32" />,
+        title: 'Smart Matching & Geo-Perimeter',
+        to: '/find-donors',
+        description: 'ABO/Rh antigen-calibrated matching, NBTC cooldown enforcement, and real-time radial perimeter discovery.',
+      },
+      {
+        icon: <Award size={24} color="#C81E32" />,
+        title: 'Donor Milestones & Rewards',
+        to: '/rewards',
+        description: 'Lifesaver points, recognition tiers, health perks, and community celebration leaderboards.',
+      },
+    ]
+  }
 ];
 
 const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
@@ -190,29 +237,78 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features */}
+      {/* Categorized Features & Clinical Architecture */}
       <section style={{ padding: '80px 20px', background: '#F8FAFC' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
-            <h2 style={{ fontSize: 'clamp(24px, 3vw, 36px)', color: '#172033', marginBottom: 12 }}>
-              Everything You Need, In One Place
+            <span style={{
+              background: '#FFF1F2', color: '#C81E32', fontSize: 12, fontWeight: 800,
+              padding: '4px 14px', borderRadius: 9999, border: '1px solid #FECDD3', textTransform: 'uppercase', letterSpacing: '0.5px'
+            }}>
+              Integrated Healthcare Architecture
+            </span>
+            <h2 style={{ fontSize: 'clamp(26px, 3.5vw, 40px)', color: '#172033', margin: '12px 0 8px', fontWeight: 900, fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+              Organized for Swift Medical Response
             </h2>
-            <p style={{ color: '#64748B', fontSize: 16, maxWidth: 500, margin: '0 auto' }}>
-              BloodBridge combines emergency blood discovery with a rewarding donation experience.
+            <p style={{ color: '#64748B', fontSize: 16, maxWidth: 620, margin: '0 auto' }}>
+              From acute hospital trauma and zero-wastage surplus exchange to chronic thalassemia care and grievance resolution.
             </p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
-            {features.map((f, i) => (
-              <div key={i} className="card card-hover" style={{ padding: 28 }}>
-                <div style={{
-                  width: 52, height: 52, borderRadius: 14,
-                  background: '#fff0f1', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  marginBottom: 18,
-                }}>
-                  {f.icon}
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 48 }}>
+            {featureCategories.map((pillar, pIdx) => (
+              <div key={pIdx}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 10 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <h3 style={{ fontSize: 20, fontWeight: 800, color: '#172033', margin: 0 }}>
+                      {pillar.category}
+                    </h3>
+                    <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 9999, background: '#E2E8F0', color: '#334155' }}>
+                      {pillar.badge}
+                    </span>
+                  </div>
                 </div>
-                <h3 style={{ fontSize: 17, fontWeight: 700, color: '#172033', marginBottom: 8 }}>{f.title}</h3>
-                <p style={{ color: '#64748B', fontSize: 14, lineHeight: 1.7 }}>{f.description}</p>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20 }}>
+                  {pillar.items.map((f, i) => (
+                    <div
+                      key={i}
+                      className="template-card"
+                      style={{
+                        padding: 26, display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+                        border: '1px solid #E2E8F0', background: '#FFFFFF'
+                      }}
+                    >
+                      <div>
+                        <div style={{
+                          width: 50, height: 50, borderRadius: 14,
+                          background: '#FFF1F2', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          marginBottom: 16, border: '1px solid #FFE4E6'
+                        }}>
+                          {f.icon}
+                        </div>
+                        <h4 style={{ fontSize: 17, fontWeight: 800, color: '#172033', marginBottom: 8 }}>
+                          {f.title}
+                        </h4>
+                        <p style={{ color: '#64748B', fontSize: 13, lineHeight: 1.6, margin: 0 }}>
+                          {f.description}
+                        </p>
+                      </div>
+
+                      <div style={{ marginTop: 20, paddingTop: 14, borderTop: '1px solid #F1F5F9' }}>
+                        <Link
+                          to={f.to}
+                          style={{
+                            fontSize: 13, fontWeight: 800, color: '#C81E32', textDecoration: 'none',
+                            display: 'inline-flex', alignItems: 'center', gap: 6,
+                          }}
+                        >
+                          Access Portal <ArrowRight size={14} />
+                        </Link>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>

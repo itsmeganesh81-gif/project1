@@ -15,8 +15,13 @@ import LevelBadge from '../components/common/LevelBadge';
 import {
   BloodBridgeLogoIcon,
   HospitalClinicalIcon,
+  BloodBankVaultIcon,
+  SurplusExchangeIcon,
   ClinicalMatchIcon,
-  RecurringTransfusionIcon
+  RecurringTransfusionIcon,
+  RarePhenotypeIcon,
+  VolunteerCourierIcon,
+  GrievanceSupportIcon
 } from '../components/common/CustomIcons';
 
 export default function DonorDashboard() {
@@ -289,6 +294,7 @@ export default function DonorDashboard() {
             { id: 'appointments', label: `Confirmed (${acceptedRequests.length})`, icon: <Calendar size={14} /> },
             { id: 'history', label: 'Transfusion History', icon: <FileText size={14} /> },
             { id: 'achievements', label: 'Badges & Perks', icon: <Award size={14} /> },
+            { id: 'services', label: 'Ecosystem Directory', icon: <HospitalClinicalIcon size={14} /> },
           ].map(tab => (
             <button
               key={tab.id}
@@ -563,6 +569,100 @@ export default function DonorDashboard() {
                   </div>
                 );
               })}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 5: ORGANIZED ECOSYSTEM DIRECTORY */}
+        {activeTab === 'services' && (
+          <div>
+            <div style={{ marginBottom: 18 }}>
+              <h3 style={{ fontSize: 16, fontWeight: 900, color: '#172033', margin: 0 }}>
+                Platform Healthcare Services Directory
+              </h3>
+              <p style={{ fontSize: 12, color: '#64748B', margin: '4px 0 0' }}>
+                All BloodBridge clinical modules categorized for instant access
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              {/* Category 1: Clinical Network */}
+              <div>
+                <span style={{ fontSize: 11, fontWeight: 800, color: '#C81E32', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: 8 }}>
+                  1. Clinical & Hospital Network
+                </span>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobileFrame ? '1fr' : 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
+                  {[
+                    { to: '/blood-bank', title: 'Blood Bank Cryo-Vault', desc: 'Component storage, TTI clearances & cold storage', icon: <BloodBankVaultIcon size={20} color="#C81E32" /> },
+                    { to: '/hospital', title: 'Hospital Emergency Desk', desc: 'Acute blood requisitions & Massive Hemorrhage Protocol', icon: <HospitalClinicalIcon size={20} color="#C81E32" /> },
+                    { to: '/surplus-board', title: 'Zero-Wastage Surplus Board', desc: 'Exchange near-expiry units within 48h to prevent discard', icon: <SurplusExchangeIcon size={20} color="#C81E32" /> },
+                  ].map((s, i) => (
+                    <Link key={i} to={s.to} style={{ textDecoration: 'none' }}>
+                      <div className="template-card" style={{ padding: 14, display: 'flex', gap: 12, alignItems: 'center' }}>
+                        <div style={{ width: 40, height: 40, borderRadius: 12, background: '#FFF1F2', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          {s.icon}
+                        </div>
+                        <div>
+                          <h4 style={{ fontSize: 13, fontWeight: 800, color: '#172033', margin: 0 }}>{s.title}</h4>
+                          <p style={{ fontSize: 11, color: '#64748B', margin: '2px 0 0' }}>{s.desc}</p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Category 2: Specialized Care */}
+              <div>
+                <span style={{ fontSize: 11, fontWeight: 800, color: '#C81E32', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: 8 }}>
+                  2. Specialized Patient Lifeline
+                </span>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobileFrame ? '1fr' : 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
+                  {[
+                    { to: '/recurring-transfusions', title: 'Thalassemia Patient Circles', desc: 'Pediatric care loops, scheduled cycles & pledge circles', icon: <RecurringTransfusionIcon size={20} color="#C81E32" /> },
+                    { to: '/rare-network', title: 'Rare Blood Group SOS', desc: 'Bombay Phenotype (hh) & Rh-Null verified registry', icon: <RarePhenotypeIcon size={20} color="#C81E32" /> },
+                    { to: '/volunteers', title: 'Volunteer Courier Network', desc: 'Emergency temperature-controlled bio-box couriers', icon: <VolunteerCourierIcon size={20} color="#C81E32" /> },
+                  ].map((s, i) => (
+                    <Link key={i} to={s.to} style={{ textDecoration: 'none' }}>
+                      <div className="template-card" style={{ padding: 14, display: 'flex', gap: 12, alignItems: 'center' }}>
+                        <div style={{ width: 40, height: 40, borderRadius: 12, background: '#FFF1F2', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          {s.icon}
+                        </div>
+                        <div>
+                          <h4 style={{ fontSize: 13, fontWeight: 800, color: '#172033', margin: 0 }}>{s.title}</h4>
+                          <p style={{ fontSize: 11, color: '#64748B', margin: '2px 0 0' }}>{s.desc}</p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Category 3: Community & Support */}
+              <div>
+                <span style={{ fontSize: 11, fontWeight: 800, color: '#C81E32', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: 8 }}>
+                  3. Community Support & Grievances
+                </span>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobileFrame ? '1fr' : 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
+                  {[
+                    { to: '/reviews', title: 'Problems & Review System', desc: 'Report any issue & track resolution with official response', icon: <GrievanceSupportIcon size={20} color="#C81E32" /> },
+                    { to: '/find-donors', title: 'AI Smart Donor Match', desc: 'Haversine radial search & ABO/Rh matrix compatibility', icon: <ClinicalMatchIcon size={20} color="#C81E32" /> },
+                    { to: '/map', title: 'Live Radar Perimeter Map', desc: 'Visual donor and hospital distribution across Bengaluru', icon: <MapPin size={20} color="#C81E32" /> },
+                  ].map((s, i) => (
+                    <Link key={i} to={s.to} style={{ textDecoration: 'none' }}>
+                      <div className="template-card" style={{ padding: 14, display: 'flex', gap: 12, alignItems: 'center' }}>
+                        <div style={{ width: 40, height: 40, borderRadius: 12, background: '#FFF1F2', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          {s.icon}
+                        </div>
+                        <div>
+                          <h4 style={{ fontSize: 13, fontWeight: 800, color: '#172033', margin: 0 }}>{s.title}</h4>
+                          <p style={{ fontSize: 11, color: '#64748B', margin: '2px 0 0' }}>{s.desc}</p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         )}
