@@ -6,6 +6,7 @@ const AppContext = createContext(null);
 export function AppProvider({ children }) {
   const [requests, setRequests] = useState([]);
   const [toast, setToast] = useState(null);
+  const [emergencyDrawerOpen, setEmergencyDrawerOpen] = useState(false);
   const [searchFilters, setSearchFilters] = useState({
     bloodGroup: 'all',
     radius: 10,
@@ -71,6 +72,9 @@ export function AppProvider({ children }) {
       requests, sendRequest, updateRequestStatus, cancelRequest,
       toast, showToast, dismissToast,
       searchFilters, setSearchFilters,
+      emergencyDrawerOpen, setEmergencyDrawerOpen,
+      openEmergencyDrawer: () => setEmergencyDrawerOpen(true),
+      closeEmergencyDrawer: () => setEmergencyDrawerOpen(false),
     }}>
       {children}
     </AppContext.Provider>

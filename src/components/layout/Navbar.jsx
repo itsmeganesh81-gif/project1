@@ -2,7 +2,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import {
   Menu, X, User, LogOut, Settings,
-  Search, LayoutDashboard, ChevronDown, Mic, History
+  Search, LayoutDashboard, ChevronDown, Mic, History, Bell
 } from 'lucide-react';
 import {
   BloodBridgeLogoIcon, BloodBankVaultIcon, HospitalClinicalIcon,
@@ -11,7 +11,9 @@ import {
 } from '../common/CustomIcons';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { useApp } from '../../context/AppContext';
 import VoiceAssistantModal from '../voice/VoiceAssistantModal';
+import NotificationDrawer from '../common/NotificationDrawer';
 import Avatar from '../common/Avatar';
 
 export default function Navbar() {
@@ -24,6 +26,7 @@ export default function Navbar() {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null); // 'clinical' | 'care' | null
   const [voiceOpen, setVoiceOpen] = useState(false);
+  const { emergencyDrawerOpen, setEmergencyDrawerOpen } = useApp();
 
   const clinicalRef = useRef(null);
   const careRef = useRef(null);
@@ -55,20 +58,20 @@ export default function Navbar() {
   const clinicalLinks = [
     {
       to: '/blood-bank',
-      label: t('bloodBank'),
-      desc: 'Component inventory, TTI test clearance & batch vaults',
+      label: t('linkBloodBank'),
+      desc: t('linkBloodBankDesc'),
       icon: <BloodBankVaultIcon size={20} color="#C81E32" />
     },
     {
       to: '/hospital',
-      label: t('hospital'),
-      desc: 'Clinical blood requisitions & Massive Hemorrhage Protocol',
+      label: t('linkHospital'),
+      desc: t('linkHospitalDesc'),
       icon: <HospitalClinicalIcon size={20} color="#C81E32" />
     },
     {
       to: '/surplus-board',
-      label: t('surplusBoard'),
-      desc: 'Near-expiry zero-wastage exchange board (Platelets & PRBC)',
+      label: t('linkSurplus'),
+      desc: t('linkSurplusDesc'),
       icon: <SurplusExchangeIcon size={20} color="#C81E32" />
     },
   ];
@@ -77,20 +80,20 @@ export default function Navbar() {
   const careLinks = [
     {
       to: '/recurring-transfusions',
-      label: t('recurringCare'),
-      desc: 'Thalassemia & Sickle Cell cycles, nadir Hb & donor circles',
+      label: t('linkRecurring'),
+      desc: t('linkRecurringDesc'),
       icon: <RecurringTransfusionIcon size={20} color="#C81E32" />
     },
     {
       to: '/rare-network',
-      label: t('rareBlood'),
-      desc: 'Bombay Phenotype (hh), Rh-Null & Immunohematology registry',
+      label: t('linkRare'),
+      desc: t('linkRareDesc'),
       icon: <RarePhenotypeIcon size={20} color="#C81E32" />
     },
     {
       to: '/volunteers',
-      label: t('volunteers'),
-      desc: 'Cold-chain rapid courier dispatch & sample transport',
+      label: t('linkVolunteer'),
+      desc: t('linkVolunteerDesc'),
       icon: <VolunteerCourierIcon size={20} color="#C81E32" />
     },
   ];
@@ -130,7 +133,7 @@ export default function Navbar() {
               style={{ fontSize: 13, padding: '8px 14px', borderRadius: 9999, fontWeight: 700 }}
             >
               <LayoutDashboard size={15} />
-              Dashboard
+              {t('navDashboard')}
             </Link>
           )}
 
@@ -141,7 +144,7 @@ export default function Navbar() {
             style={{ fontSize: 13, padding: '8px 14px', borderRadius: 9999, fontWeight: 700 }}
           >
             <Search size={15} />
-            {t('findDonors')}
+            {t('navFindDonors')}
           </Link>
 
           {/* Categorized Dropdown 1: Clinical Network */}
@@ -161,7 +164,7 @@ export default function Navbar() {
               }}
             >
               <HospitalClinicalIcon size={15} color={isClinicalActive ? '#C81E32' : '#64748B'} />
-              Clinical Network
+              {t('navClinicalNetwork')}
               <ChevronDown size={14} style={{ transform: activeDropdown === 'clinical' ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
             </button>
 
@@ -176,7 +179,7 @@ export default function Navbar() {
                 }}
               >
                 <div style={{ padding: '6px 12px 10px', fontSize: 11, fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                  Hospitals & Blood Vaults
+                  {t('clinicalDropdownTitle')}
                 </div>
                 {clinicalLinks.map(link => (
                   <Link
@@ -224,7 +227,7 @@ export default function Navbar() {
               }}
             >
               <RecurringTransfusionIcon size={15} color={isCareActive ? '#C81E32' : '#64748B'} />
-              Specialized Care
+              {t('navSpecializedCare')}
               <ChevronDown size={14} style={{ transform: activeDropdown === 'care' ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
             </button>
 
@@ -239,7 +242,7 @@ export default function Navbar() {
                 }}
               >
                 <div style={{ padding: '6px 12px 10px', fontSize: 11, fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                  Lifeline Patient Networks
+                  {t('careDropdownTitle')}
                 </div>
                 {careLinks.map(link => (
                   <Link
@@ -277,7 +280,7 @@ export default function Navbar() {
             style={{ fontSize: 13, padding: '8px 14px', borderRadius: 9999, fontWeight: 700 }}
           >
             <GrievanceSupportIcon size={15} />
-            {t('reviewsAndSupport')}
+            {t('navSupportReviews')}
           </Link>
         </nav>
 
@@ -323,7 +326,7 @@ export default function Navbar() {
           {/* Hands-free Voice Assistant Button */}
           <button
             onClick={() => setVoiceOpen(true)}
-            title="BloodBridge Hands-Free Voice Assistant"
+            title={t('navVoiceTitle')}
             style={{
               width: 36, height: 36, borderRadius: '50%',
               background: '#FFF1F2', color: '#C81E32', border: '1px solid #FECDD3',
@@ -332,6 +335,28 @@ export default function Navbar() {
             }}
           >
             <Mic size={17} />
+          </button>
+
+          {/* Emergency SOS Radar Notification Bell */}
+          <button
+            onClick={() => setEmergencyDrawerOpen(true)}
+            title={t('navRadarTitle')}
+            style={{
+              width: 36, height: 36, borderRadius: '50%',
+              background: '#FFF1F2', color: '#C81E32', border: '1px solid #FECDD3',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 2px 6px rgba(200,30,50,0.15)', position: 'relative', transition: 'all 0.2s'
+            }}
+          >
+            <Bell size={17} />
+            <span style={{
+              position: 'absolute', top: -3, right: -3,
+              background: '#DC2626', color: 'white', fontSize: 10, fontWeight: 900,
+              width: 17, height: 17, borderRadius: '50%', display: 'flex',
+              alignItems: 'center', justifyContent: 'center', border: '2px solid white'
+            }}>
+              3
+            </span>
           </button>
 
           {/* User Profile or Auth Buttons */}
@@ -364,7 +389,7 @@ export default function Navbar() {
                       display: 'inline-block', marginTop: 4, fontSize: 10, fontWeight: 800,
                       background: '#FFF1F2', color: '#C81E32', padding: '2px 8px', borderRadius: 9999
                     }}>
-                      🩸 {user.bloodGroup} • {user.points || 0} pts
+                      🩸 {user.bloodGroup} • {user.points || 0} {t('heroPoints')}
                     </span>
                   </div>
 
@@ -374,7 +399,7 @@ export default function Navbar() {
                     className="nav-item"
                     style={{ padding: '8px 12px', fontSize: 13 }}
                   >
-                    <User size={15} /> My Profile
+                    <User size={15} /> {t('navProfile')}
                   </Link>
                   <Link
                     to="/rewards"
@@ -382,7 +407,7 @@ export default function Navbar() {
                     className="nav-item"
                     style={{ padding: '8px 12px', fontSize: 13 }}
                   >
-                    🏆 Rewards & Badges
+                    🏆 {t('navRewards')}
                   </Link>
 
                   <div style={{ borderTop: '1px solid #f1f5f9', marginTop: 4, paddingTop: 4 }}>
@@ -394,7 +419,7 @@ export default function Navbar() {
                         background: 'none', fontSize: 13, fontWeight: 700, color: '#EF4444'
                       }}
                     >
-                      <LogOut size={15} /> Sign Out
+                      <LogOut size={15} /> {t('navLogOut')}
                     </button>
                   </div>
                 </div>
@@ -403,10 +428,10 @@ export default function Navbar() {
           ) : (
             <div style={{ display: 'flex', gap: 8 }}>
               <Link to="/login" className="template-pill-btn-outline" style={{ fontSize: 12, padding: '7px 16px' }}>
-                Log In
+                {t('navSignIn')}
               </Link>
               <Link to="/register" className="template-pill-btn" style={{ fontSize: 12, padding: '7px 18px' }}>
-                Join Us
+                {t('navRegister')}
               </Link>
             </div>
           )}
@@ -434,18 +459,18 @@ export default function Navbar() {
               className="nav-item active"
               onClick={() => setMenuOpen(false)}
             >
-              <LayoutDashboard size={16} /> My Dashboard
+              <LayoutDashboard size={16} /> {t('navDashboard')}
             </Link>
           )}
 
           <Link to="/find-donors" className="nav-item" onClick={() => setMenuOpen(false)}>
-            <Search size={16} /> {t('findDonors')}
+            <Search size={16} /> {t('navFindDonors')}
           </Link>
 
           {/* Mobile Category 1: Clinical Network */}
           <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: 10 }}>
             <span style={{ fontSize: 11, fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: 6 }}>
-              Clinical Network
+              {t('navClinicalNetwork')}
             </span>
             {clinicalLinks.map(link => (
               <Link
@@ -463,7 +488,7 @@ export default function Navbar() {
           {/* Mobile Category 2: Specialized Care */}
           <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: 10 }}>
             <span style={{ fontSize: 11, fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: 6 }}>
-              Specialized Care
+              {t('navSpecializedCare')}
             </span>
             {careLinks.map(link => (
               <Link
@@ -481,13 +506,13 @@ export default function Navbar() {
           {/* Mobile Category 3: Support */}
           <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: 10 }}>
             <span style={{ fontSize: 11, fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: 6 }}>
-              Support & Community
+              {t('navSupportReviews')}
             </span>
             <Link to="/reviews" className="nav-item" onClick={() => setMenuOpen(false)}>
-              <GrievanceSupportIcon size={16} /> {t('reviewsAndSupport')}
+              <GrievanceSupportIcon size={16} /> {t('navSupportReviews')}
             </Link>
             <Link to="/rewards" className="nav-item" onClick={() => setMenuOpen(false)}>
-              🏆 Rewards & Badges
+              🏆 {t('navRewards')}
             </Link>
           </div>
         </div>
@@ -495,6 +520,9 @@ export default function Navbar() {
 
       {/* Voice Assistant Modal */}
       <VoiceAssistantModal isOpen={voiceOpen} onClose={() => setVoiceOpen(false)} />
+
+      {/* Emergency Dispatch Notification Drawer */}
+      <NotificationDrawer isOpen={emergencyDrawerOpen} onClose={() => setEmergencyDrawerOpen(false)} />
     </header>
   );
 }

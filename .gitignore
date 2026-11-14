@@ -22,3 +22,20 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+.pytest_cache/
+*.egg-info/
+
+# Virtual Environment
+venv/
+.venv/
+ENV/
+
+# Database
+*.sqlite3
+*.db

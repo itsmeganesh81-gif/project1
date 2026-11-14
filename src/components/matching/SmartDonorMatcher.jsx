@@ -11,6 +11,7 @@ import Avatar from '../common/Avatar';
 import RequestModal from '../requests/RequestModal';
 import { BANGALORE_LOCALITIES, BLOOD_GROUPS, mockDonors } from '../../data/mockDonors';
 import { calculateDistance } from '../../utils/distanceCalculator';
+import { useLanguage } from '../../context/LanguageContext';
 
 // Medically approved clinical compatibility rules (Mirror of backend service)
 const RED_CELL_COMPATIBILITY = {
@@ -52,6 +53,7 @@ const LOCALITY_COORDS = {
 };
 
 export default function SmartDonorMatcher({ initialBloodGroup = 'O+', initialLocality = 'Koramangala' }) {
+  const { t, language } = useLanguage();
   const [bloodGroup, setBloodGroup] = useState(initialBloodGroup);
   const [component, setComponent] = useState('whole_blood');
   const [locality, setLocality] = useState(initialLocality);
@@ -60,6 +62,13 @@ export default function SmartDonorMatcher({ initialBloodGroup = 'O+', initialLoc
   const [results, setResults] = useState(null);
   const [selectedDonorForRequest, setSelectedDonorForRequest] = useState(null);
   const [expandedExplanation, setExpandedExplanation] = useState(null);
+
+  const getMatchExplanation = (donor) => {
+    const isExact = donor.is_exact_match;
+    const matchType = isExact ? t('exactMatch') : `${t('compatibleMatch')} (${donor.blood_group})`;
+    const awayText = t('tickerAway') || 'away';
+    return `${matchType} • ~${donor.distance_km} km ${awayText} (${donor.locality}) • ${t('nbtcCleared')}`;
+  };
 
   const runSmartMatching = async () => {
     setLoading(true);
@@ -150,10 +159,10 @@ export default function SmartDonorMatcher({ initialBloodGroup = 'O+', initialLoc
             </div>
             <div>
               <h2 style={{ fontSize: 18, fontWeight: 800, color: '#172033', margin: 0 }}>
-                Clinical Donor Compatibility Engine
+                {t('matcherEngineTitle')}
               </h2>
               <p style={{ fontSize: 12, color: '#64748B', margin: 0 }}>
-                Multi-factor clinical matching: blood component compatibility, NBTC cooldowns, proximity & alert fairness
+                {t('matcherEngineDesc')}
               </p>
             </div>
           </div>
@@ -161,7 +170,7 @@ export default function SmartDonorMatcher({ initialBloodGroup = 'O+', initialLoc
             fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 20,
             background: '#F3E8FF', color: '#7C3AED', border: '1px solid #E9D5FF'
           }}>
-            Clinical AI Model v1.2
+            {t('clinicalAiModel')}
           </span>
         </div>
 
@@ -170,7 +179,7 @@ export default function SmartDonorMatcher({ initialBloodGroup = 'O+', initialLoc
           {/* Blood Group */}
           <div>
             <label style={{ fontSize: 12, fontWeight: 700, color: '#475569', display: 'block', marginBottom: 6 }}>
-              Recipient Blood Group
+              {t('labelRecipientGroup')}
             </label>
             <select
               className="form-input form-select"
@@ -185,24 +194,24 @@ export default function SmartDonorMatcher({ initialBloodGroup = 'O+', initialLoc
           {/* Component Type */}
           <div>
             <label style={{ fontSize: 12, fontWeight: 700, color: '#475569', display: 'block', marginBottom: 6 }}>
-              Required Blood Component
+              {t('labelComponent')}
             </label>
             <select
               className="form-input form-select"
               value={component}
               onChange={e => setComponent(e.target.value)}
             >
-              <option value="whole_blood">Whole Blood (Standard)</option>
-              <option value="prbc">PRBC (Packed Red Cells)</option>
-              <option value="platelets">Platelets / RDP / SDP</option>
-              <option value="ffp">Fresh Frozen Plasma (FFP)</option>
+              <option value="whole_blood">{t('compWholeBlood')}</option>
+              <option value="prbc">{t('compPrbc')}</option>
+              <option value="platelets">{t('compPlatelets')}</option>
+              <option value="ffp">{t('compFfp')}</option>
             </select>
           </div>
 
           {/* Locality */}
           <div>
             <label style={{ fontSize: 12, fontWeight: 700, color: '#475569', display: 'block', marginBottom: 6 }}>
-              Hospital / Patient Locality
+              {t('labelLocality')}
             </label>
             <select
               className="form-input form-select"
@@ -216,16 +225,16 @@ export default function SmartDonorMatcher({ initialBloodGroup = 'O+', initialLoc
           {/* Urgency */}
           <div>
             <label style={{ fontSize: 12, fontWeight: 700, color: '#475569', display: 'block', marginBottom: 6 }}>
-              Urgency Level
+              {t('labelUrgency')}
             </label>
             <select
               className="form-input form-select"
               value={urgency}
               onChange={e => setUrgency(e.target.value)}
             >
-              <option value="critical">🚨 Immediate Critical SOS</option>
-              <option value="high">Urgent (Within 4-6 hours)</option>
-              <option value="medium">Planned Transfusion (24-48 hrs)</option>
+              <option value="critical">{t('urgencyCritical')}</option>
+              <option value="high">{t('urgencyHigh')}</option>
+              <option value="medium">{t('urgencyMedium')}</option>
             </select>
           </div>
         </div>
@@ -240,7 +249,7 @@ export default function SmartDonorMatcher({ initialBloodGroup = 'O+', initialLoc
               }}>
                 <AlertTriangle size={18} color="#D97706" style={{ flexShrink: 0 }} />
                 <span style={{ fontSize: 12, color: '#92400E', fontWeight: 600 }}>
-                  {results.expansion_reason}
+                  {t('radiusExpandedNotice')}
                 </span>
               </div>
             )}
@@ -251,7 +260,7 @@ export default function SmartDonorMatcher({ initialBloodGroup = 'O+', initialLoc
             }}>
               <ShieldCheck size={18} color="#475569" style={{ flexShrink: 0 }} />
               <span style={{ fontSize: 12, color: '#475569' }}>
-                <strong>Medical Advisory:</strong> {results.medical_advisory}
+                <strong>{t('medicalAdvisory')}:</strong> {t('medicalAdvisoryDesc')}
               </span>
             </div>
           </div>
@@ -262,10 +271,10 @@ export default function SmartDonorMatcher({ initialBloodGroup = 'O+', initialLoc
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <div>
           <h3 style={{ fontSize: 16, fontWeight: 800, color: '#172033', margin: 0 }}>
-            Top Ranked Recommended Donors {results ? `(${results.total_matched})` : ''}
+            {t('topRankedDonors')} {results ? `(${results.total_matched})` : ''}
           </h3>
           <p style={{ fontSize: 12, color: '#64748B', margin: 0 }}>
-            Ranked by clinical compatibility matrix, NBTC whole blood cooldowns, proximity, and notification fairness
+            {t('rankedByDesc')}
           </p>
         </div>
         <button
@@ -275,7 +284,7 @@ export default function SmartDonorMatcher({ initialBloodGroup = 'O+', initialLoc
           style={{ display: 'flex', alignItems: 'center', gap: 6 }}
         >
           <ClinicalMatchIcon size={14} color="#7C3AED" />
-          {loading ? 'Re-scoring...' : 'Refresh Matches'}
+          {loading ? t('loading') : t('btnRefreshMatches')}
         </button>
       </div>
 
@@ -287,8 +296,8 @@ export default function SmartDonorMatcher({ initialBloodGroup = 'O+', initialLoc
             borderTop: '3px solid #7C3AED', borderRadius: '50%',
             animation: 'spin 0.8s linear infinite', margin: '0 auto 16px'
           }} />
-          <p style={{ fontSize: 14, fontWeight: 700, color: '#172033' }}>Evaluating Clinical Compatibility Matrix...</p>
-          <p style={{ fontSize: 12, color: '#64748B' }}>Checking NBTC 90/120-day whole blood cooldowns & approximate distance</p>
+          <p style={{ fontSize: 14, fontWeight: 700, color: '#172033' }}>{t('evaluatingMatrix')}</p>
+          <p style={{ fontSize: 12, color: '#64748B' }}>{t('evaluatingMatrixDesc')}</p>
         </div>
       )}
 
@@ -300,10 +309,10 @@ export default function SmartDonorMatcher({ initialBloodGroup = 'O+', initialLoc
         }}>
           <AlertTriangle size={36} color="#94A3B8" style={{ marginBottom: 12 }} />
           <h4 style={{ fontSize: 15, fontWeight: 800, color: '#172033', marginBottom: 4 }}>
-            No Immediately Compatible Donors Found in Radius
+            {t('noCompatibleDonors')}
           </h4>
           <p style={{ fontSize: 13, color: '#64748B', maxWidth: 460, margin: '0 auto 16px' }}>
-            No registered donors currently meet the strict clinical compatibility criteria for <strong>{bloodGroup} {component}</strong> within {results.effective_radius_km} km.
+            {t('noCompatibleDonorsDesc')}
           </p>
           <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
             <button
@@ -313,7 +322,7 @@ export default function SmartDonorMatcher({ initialBloodGroup = 'O+', initialLoc
               }}
               className="btn btn-primary btn-sm"
             >
-              Expand to Whole Blood
+              {t('btnExpandWholeBlood')}
             </button>
           </div>
         </div>
@@ -347,7 +356,7 @@ export default function SmartDonorMatcher({ initialBloodGroup = 'O+', initialLoc
                         fontSize: 10, fontWeight: 800, padding: '2px 8px', borderRadius: 12,
                         background: '#DCFCE7', color: '#15803D', border: '1px solid #BBF7D0'
                       }}>
-                        ⭐ BEST CLINICAL MATCH
+                        {t('bestClinicalMatch')}
                       </span>
                     )}
                     {donor.is_verified && (
@@ -355,7 +364,7 @@ export default function SmartDonorMatcher({ initialBloodGroup = 'O+', initialLoc
                         fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 6,
                         background: '#E0F2FE', color: '#0284C7'
                       }}>
-                        ✓ Verified Donor
+                        {t('verifiedDonorBadge')}
                       </span>
                     )}
                   </div>
@@ -363,7 +372,7 @@ export default function SmartDonorMatcher({ initialBloodGroup = 'O+', initialLoc
                   <div style={{ display: 'flex', gap: 16, alignItems: 'center', marginTop: 6, flexWrap: 'wrap' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: '#64748B' }}>
                       <MapPin size={13} color="#D62839" />
-                      <span>{donor.locality} (~{donor.distance_km} km away)</span>
+                      <span>{donor.locality} (~{donor.distance_km} km {t('tickerAway') || 'away'})</span>
                     </div>
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: '#64748B' }}>
@@ -373,7 +382,7 @@ export default function SmartDonorMatcher({ initialBloodGroup = 'O+', initialLoc
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: '#64748B' }}>
                       <Award size={13} color="#D97706" />
-                      <span>{donor.total_donations} Verified Donations</span>
+                      <span>{donor.total_donations} {t('statDonations')}</span>
                     </div>
                   </div>
 
@@ -384,7 +393,7 @@ export default function SmartDonorMatcher({ initialBloodGroup = 'O+', initialLoc
                     fontSize: 12, color: '#334155'
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span>💡 <strong>Recommendation Reason:</strong> {donor.match_explanation}</span>
+                      <span>💡 <strong>{t('recommendationReason')}:</strong> {getMatchExplanation(donor)}</span>
                     </div>
                   </div>
                 </div>
@@ -402,7 +411,7 @@ export default function SmartDonorMatcher({ initialBloodGroup = 'O+', initialLoc
                       {donor.score}%
                     </div>
                     <span style={{ fontSize: 10, color: '#64748B', fontWeight: 600, textTransform: 'uppercase' }}>
-                      AI Match Score
+                      {t('aiMatchScore')}
                     </span>
                   </div>
 
@@ -421,7 +430,7 @@ export default function SmartDonorMatcher({ initialBloodGroup = 'O+', initialLoc
                     style={{ display: 'flex', alignItems: 'center', gap: 6 }}
                   >
                     <Send size={13} />
-                    Send SOS
+                    {t('btnSendSOS')}
                   </button>
                 </div>
               </div>

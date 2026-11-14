@@ -152,6 +152,16 @@ def run_all_tests():
 
     # Test 9: Admin Institution Verification Workflow
     pending_list = get_pending_institutions(admin_user, db)
+    if len(pending_list) == 0:
+        # Reset or provision an institution to pending for idempotent test repeatability
+        inst = db.query(Institution).first()
+        if inst:
+            inst.verification_status = "pending"
+            if inst.user:
+                inst.user.is_verified = False
+            db.commit()
+            pending_list = get_pending_institutions(admin_user, db)
+
     assert len(pending_list) >= 1, "Expected at least 1 pending institution"
     target_inst = pending_list[0]
 

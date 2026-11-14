@@ -6,6 +6,8 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import Toast from './components/common/Toast';
 import ProtectedRoute from './components/layout/ProtectedRoute';
+import EmergencyBroadcastBanner from './components/common/EmergencyBroadcastBanner';
+import { useApp } from './context/AppContext';
 
 // Pages
 import LandingPage from './pages/LandingPage';
@@ -29,92 +31,101 @@ import VolunteerDashboard from './pages/VolunteerDashboard';
 import SurplusBoard from './pages/SurplusBoard';
 import ReviewsAndSupport from './pages/ReviewsAndSupport';
 
+function AppContent() {
+  const { setEmergencyDrawerOpen } = useApp();
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <Navbar />
+      <main style={{ flex: 1 }}>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/find-donors" element={<FindDonors />} />
+          <Route path="/map" element={<MapPage />} />
+          <Route path="/donors/:id" element={<DonorProfile />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/rewards" element={<Rewards />} />
+          <Route path="/recurring-transfusions" element={<RecurringTransfusions />} />
+          <Route path="/rare-network" element={<RareBloodNetwork />} />
+          <Route path="/blood-bank" element={<BloodBankDashboard />} />
+          <Route path="/hospital" element={<HospitalDashboard />} />
+          <Route path="/volunteers" element={<VolunteerDashboard />} />
+          <Route path="/surplus-board" element={<SurplusBoard />} />
+          <Route path="/reviews" element={<ReviewsAndSupport />} />
+          <Route path="/support" element={<ReviewsAndSupport />} />
+
+          {/* Protected Routes */}
+          <Route
+            path="/receiver-dashboard"
+            element={
+              <ProtectedRoute>
+                <ReceiverDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/donor-dashboard"
+            element={
+              <ProtectedRoute>
+                <DonorDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/requests"
+            element={
+              <ProtectedRoute>
+                <Requests />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/donation-history"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
+      <EmergencyBroadcastBanner onOpenDrawer={() => setEmergencyDrawerOpen(true)} />
+      <Footer />
+      <Toast />
+    </div>
+  );
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <AppProvider>
           <LanguageProvider>
-            <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-              <Navbar />
-              <main style={{ flex: 1 }}>
-                <Routes>
-                  {/* Public Routes */}
-                  <Route path="/" element={<LandingPage />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
-                  <Route path="/forgot-password" element={<ForgotPassword />} />
-                  <Route path="/find-donors" element={<FindDonors />} />
-                  <Route path="/map" element={<MapPage />} />
-                  <Route path="/donors/:id" element={<DonorProfile />} />
-                  <Route path="/leaderboard" element={<Leaderboard />} />
-                  <Route path="/rewards" element={<Rewards />} />
-                  <Route path="/recurring-transfusions" element={<RecurringTransfusions />} />
-                  <Route path="/rare-network" element={<RareBloodNetwork />} />
-                  <Route path="/blood-bank" element={<BloodBankDashboard />} />
-                  <Route path="/hospital" element={<HospitalDashboard />} />
-                  <Route path="/volunteers" element={<VolunteerDashboard />} />
-                  <Route path="/surplus-board" element={<SurplusBoard />} />
-                  <Route path="/reviews" element={<ReviewsAndSupport />} />
-                  <Route path="/support" element={<ReviewsAndSupport />} />
-
-                {/* Protected Routes */}
-                <Route
-                  path="/receiver-dashboard"
-                  element={
-                    <ProtectedRoute>
-                      <ReceiverDashboard />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/donor-dashboard"
-                  element={
-                    <ProtectedRoute>
-                      <DonorDashboard />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/requests"
-                  element={
-                    <ProtectedRoute>
-                      <Requests />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/profile"
-                  element={
-                    <ProtectedRoute>
-                      <Profile />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/donation-history"
-                  element={
-                    <ProtectedRoute>
-                      <Profile />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/settings"
-                  element={
-                    <ProtectedRoute>
-                      <Profile />
-                    </ProtectedRoute>
-                  }
-                />
-
-                {/* Fallback */}
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </main>
-            <Footer />
-            <Toast />
-          </div>
+            <AppContent />
           </LanguageProvider>
         </AppProvider>
       </AuthProvider>

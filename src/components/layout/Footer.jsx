@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Heart, Mail, Phone, ShieldCheck } from 'lucide-react';
 import { BloodBridgeLogoIcon, GrievanceSupportIcon } from '../common/CustomIcons';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function Footer() {
+  const { t } = useLanguage();
+
   return (
     <footer style={{ background: '#172033', color: '#94a3b8', padding: '48px 20px 24px', marginTop: 'auto' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto' }}>
@@ -22,24 +25,24 @@ export default function Footer() {
               </span>
             </div>
             <p style={{ fontSize: 13, lineHeight: 1.7, maxWidth: 240 }}>
-              Connecting voluntary blood donors, blood banks, and hospitals across India. Every donation matters, every life counts.
+              {t('footerTagline')}
             </p>
             <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
               <span style={{ background: '#059669', color: 'white', fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 6, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                <ShieldCheck size={12} /> DPDP Act 2023 Compliant
+                <ShieldCheck size={12} /> {t('footerCompliance')}
               </span>
             </div>
           </div>
 
           {/* Clinical & Community Network */}
           <div>
-            <h4 style={{ color: 'white', fontWeight: 700, fontSize: 14, marginBottom: 16 }}>Clinical Network</h4>
+            <h4 style={{ color: 'white', fontWeight: 700, fontSize: 14, marginBottom: 16 }}>{t('footerClinicalHeader')}</h4>
             {[
-              { to: '/find-donors', label: 'AI Smart Donor Match' },
-              { to: '/recurring-transfusions', label: 'Thalassemia Patient Circles' },
-              { to: '/rare-network', label: 'Rare Blood Group SOS' },
-              { to: '/surplus-board', label: 'Near-Expiry Surplus Board' },
-              { to: '/volunteers', label: 'Volunteer Courier Hub' },
+              { to: '/find-donors', label: t('navFindDonors') },
+              { to: '/recurring-transfusions', label: t('linkRecurring') },
+              { to: '/rare-network', label: t('linkRare') },
+              { to: '/surplus-board', label: t('linkSurplus') },
+              { to: '/volunteers', label: t('linkVolunteer') },
             ].map(link => (
               <Link key={link.to} to={link.to} style={{ display: 'block', color: '#94a3b8', fontSize: 13, textDecoration: 'none', marginBottom: 8, transition: 'color 0.2s' }}
                 onMouseEnter={e => e.target.style.color = '#D62839'}
@@ -52,12 +55,12 @@ export default function Footer() {
 
           {/* Support & Grievances */}
           <div>
-            <h4 style={{ color: 'white', fontWeight: 700, fontSize: 14, marginBottom: 16 }}>Support & Grievances</h4>
+            <h4 style={{ color: 'white', fontWeight: 700, fontSize: 14, marginBottom: 16 }}>{t('footerSupportHeader')}</h4>
             {[
-              { to: '/reviews', label: 'Report a Problem & Express Needs' },
-              { to: '/bloodbank-dashboard', label: 'Blood Bank Portal' },
-              { to: '/hospital-dashboard', label: 'Hospital Emergency Desk' },
-              { to: '/map', label: 'Live Donor Radar' },
+              { to: '/reviews', label: t('navSupportReviews') },
+              { to: '/blood-bank', label: t('linkBloodBank') },
+              { to: '/hospital', label: t('linkHospital') },
+              { to: '/rewards', label: t('navRewards') },
             ].map(link => (
               <Link key={link.to} to={link.to} style={{ display: 'block', color: '#94a3b8', fontSize: 13, textDecoration: 'none', marginBottom: 8, transition: 'color 0.2s' }}
                 onMouseEnter={e => e.target.style.color = '#D62839'}
@@ -89,7 +92,7 @@ export default function Footer() {
 
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
           <p style={{ fontSize: 12 }}>© 2026 BloodBridge India. Built with <Heart size={12} color="#D62839" style={{ display: 'inline' }} /> for humanity.</p>
-          <p style={{ fontSize: 12 }}>Secured under the Digital Personal Data Protection Act, 2023.</p>
+          <p style={{ fontSize: 12 }}>{t('footerRights')}</p>
         </div>
       </div>
     </footer>

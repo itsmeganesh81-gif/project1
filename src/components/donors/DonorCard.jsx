@@ -6,8 +6,10 @@ import BloodGroupBadge from '../common/BloodGroupBadge';
 import LevelBadge from '../common/LevelBadge';
 import { formatDistance } from '../../utils/distanceCalculator';
 import RequestModal from '../requests/RequestModal';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function DonorCard({ donor, showDistance = true }) {
+  const { t } = useLanguage();
   const [showRequest, setShowRequest] = useState(false);
 
   return (
@@ -38,7 +40,7 @@ export default function DonorCard({ donor, showDistance = true }) {
                 fontSize: 11, fontWeight: 600, color: '#D62839',
                 background: '#fff0f1', padding: '2px 8px', borderRadius: 6,
               }}>
-                📍 {formatDistance(donor.distance)} away
+                📍 {formatDistance(donor.distance)} {t('tickerAway') || 'away'}
               </span>
             )}
           </div>
@@ -51,9 +53,9 @@ export default function DonorCard({ donor, showDistance = true }) {
           borderTop: '1px solid #f1f5f9', borderBottom: '1px solid #f1f5f9',
         }}>
           {[
-            { label: 'Donations', value: donor.totalDonations, icon: '🩸' },
-            { label: 'Points', value: `${donor.points}`, icon: '⭐' },
-            { label: 'Status', value: donor.available ? 'Available' : 'Unavailable', icon: donor.available ? '✅' : '⏸️' },
+            { label: t('statDonations'), value: donor.totalDonations, icon: '🩸' },
+            { label: t('statPoints'), value: `${donor.points}`, icon: '⭐' },
+            { label: t('statStatus'), value: donor.available ? t('statusAvailableShort') : t('statusUnavailableShort'), icon: donor.available ? '✅' : '⏸️' },
           ].map((stat, i) => (
             <div key={i} style={{
               padding: '10px 8px', textAlign: 'center',
@@ -75,12 +77,12 @@ export default function DonorCard({ donor, showDistance = true }) {
               boxShadow: donor.available ? '0 0 0 3px rgba(16,185,129,0.2)' : 'none',
             }} />
             <span style={{ fontSize: 12, fontWeight: 600, color: donor.available ? '#10B981' : '#94a3b8' }}>
-              {donor.available ? 'Available to donate' : 'Currently unavailable'}
+              {donor.available ? t('statusAvailable') : t('statusUnavailable')}
             </span>
           </div>
           {!donor.verified && (
             <span style={{ fontSize: 10, color: '#94a3b8', background: '#f1f5f9', padding: '2px 6px', borderRadius: 4, fontWeight: 600 }}>
-              Unverified
+              {t('badgeUnverified')}
             </span>
           )}
         </div>
@@ -88,7 +90,7 @@ export default function DonorCard({ donor, showDistance = true }) {
         {/* Actions */}
         <div style={{ padding: '0 18px 16px', display: 'flex', gap: 8 }}>
           <Link to={`/donor/${donor.id}`} className="btn btn-ghost btn-sm" style={{ flex: 1, justifyContent: 'center' }}>
-            <Eye size={14} /> View Profile
+            <Eye size={14} /> {t('btnViewProfile')}
           </Link>
           <button
             onClick={() => setShowRequest(true)}
@@ -96,7 +98,7 @@ export default function DonorCard({ donor, showDistance = true }) {
             style={{ flex: 1, justifyContent: 'center' }}
             disabled={!donor.available}
           >
-            <Send size={14} /> Send Request
+            <Send size={14} /> {t('btnSendRequest')}
           </button>
         </div>
       </div>

@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  bloodbridge-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bloodbridge-production
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - BLOODBRIDGE_SECRET_KEY=bloodbridge-secure-key-2026-bengaluru
+      - DATABASE_URL=sqlite:////app/data/bloodbridge.db
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - bloodbridge_data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  bloodbridge_data:
+    name: bloodbridge_data
+
